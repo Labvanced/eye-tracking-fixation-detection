@@ -1,7 +1,7 @@
 {
   "name": "labvanced-fixation-detection",
   "version": "1.0.0",
-  "description": "",
+  "description": "A dispersion based fixation detection algorithm for eye tracking data gathered with Labvanced",
   "main": "run.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

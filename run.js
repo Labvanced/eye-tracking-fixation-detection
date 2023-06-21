@@ -12,9 +12,10 @@ var task_name = "large_grid";  // loading data for this task only (need to custo
 // defining file paths. 
 // NOTE: You can loop over this for instance by changing the subjectNr
 var subjectNr = 1
+var dataStream = 'lb'
 var pathPrefix = './data/'
-var pathTrialData = '/trial_data.csv'
-var pathTimeSeries = '/timeseries_data.csv'
+var pathTrialData = '/lb_trials/trial_data.csv'
+var pathTimeSeries = '/' + dataStream +'_timeseries/timeseries_data.csv'
 var filePathTrialData = pathPrefix+subjectNr+pathTrialData
 
 // load trial data CSV file 
@@ -26,12 +27,20 @@ var t_data = loadCSV(filePathTrialData, {
 // get the calibration error        
 var calib_error = t_data.data[1][5];
 
-
+if(dataStream == 'lb'){
+    var dataColumns = ['timestamp', 'X_lb', 'Y_lb', 'c', 'Trial_Nr','Task_Name'];
+}
+else{
+    var dataColumns = ['timestamp', 'X_el', 'Y_el', 'c', 'Trial_Nr','Task_Name'];
+}
 // get the time series/ eye tracking data
 var filePathTimeSeriesData = pathPrefix+subjectNr+pathTimeSeries
 var { data } = loadCSV(filePathTimeSeriesData, {
     shuffle: false,
-    dataColumns: ['t', 'x', 'y', 'c', 'Trial_Nr','Task_Name'],
+    // the column names could be different X_lb or Y_lb usually for labvanced for Eyelink X_el Y_el also time column could be different
+    
+    dataColumns: dataColumns
+    
 });
 
 // filter time series data for one specified task
@@ -78,7 +87,7 @@ for (var i = 0; i < data.length - 1; i++) {
 ////////////////////////////////////////////////////////////////////////////////
 
 //saving the output in a csv file
-var fileOutputPath = pathPrefix +subjectNr +'/fixations_task_'+task_name+'.csv'
+var fileOutputPath = pathPrefix +subjectNr +'/fixations_task_'+dataStream+ '_' +task_name+'_.csv'
 var header = ['start_time','end_time','fixation_duration','X_mean','Y_mean','dispersion','conclusionCriteria'];
 var fixationCsv = convertArrayToCSV(fixations, {
     header,
