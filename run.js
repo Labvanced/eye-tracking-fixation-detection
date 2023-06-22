@@ -24,11 +24,16 @@ var t_data = loadCSV(filePathTrialData, {
     shuffle: false,
     dataColumns: ['Trial_Nr', 'StartFrame', 'target_visibility_afterTime', 'targetX', 'targetY', 'calibration_error','Task_Name','drift_vector','reactionTime'],
 });  
-// get the calibration error        
-var calib_error = t_data.data[1][5];
+// get the calibration error from specific task large_grid
+var calib_error = null;
+t_data.data.forEach((trial) => {
+    if(trial[6]=="large_grid"){
+        calib_error = trial[1][5];
+    }
+})
 
 if(dataStream == 'lb'){
-    var dataColumns = ['timestamp', 'X_lb', 'Y_lb', 'c', 'Trial_Nr','Task_Name'];
+    var dataColumns = [12, 10 , 11, 13, 'Trial_Nr','Task_Name'];
 }
 else{
     var dataColumns = ['timestamp', 'X_el', 'Y_el', 'c', 'Trial_Nr','Task_Name'];
@@ -66,6 +71,16 @@ var fixations = [];
 // loop over all gaze points 
 for (var i = 0; i < data.length - 1; i++) {
     var input_data = data[i]
+
+    // skip empty rows:
+    if (
+        typeof input_data[0] != "number" || 
+        typeof input_data[1] != "number" || 
+        typeof input_data[2] != "number" || 
+        typeof input_data[3] != "number"
+        ) {
+        continue;
+    }
     
     // process gaze point, will add more points until a fixation is detected/concluded
     var result = fixationDetector.executeAlgorithm(input_data);
@@ -87,7 +102,7 @@ for (var i = 0; i < data.length - 1; i++) {
 ////////////////////////////////////////////////////////////////////////////////
 
 //saving the output in a csv file
-var fileOutputPath = pathPrefix +subjectNr +'/fixations_task_'+dataStream+ '_' +task_name+'_.csv'
+var fileOutputPath = pathPrefix +subjectNr +'/fixations_'+dataStream+'_task_'+task_name+'_.csv'
 var header = ['start_time','end_time','fixation_duration','X_mean','Y_mean','dispersion','conclusionCriteria'];
 var fixationCsv = convertArrayToCSV(fixations, {
     header,

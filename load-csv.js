@@ -2,9 +2,20 @@ const fs = require('fs');
 const _ = require('lodash');
 
 function extractColumns(data, columnNames) {
-  const headers = _.first(data);
+  var headers = _.first(data);
+
+  // remove the quotes from the beginning and end of the header cells:
+  headers = _.map(headers, column => column.replace(/^"+|"+$/gm,''));
 
   const indexes = _.map(columnNames, column => headers.indexOf(column));
+
+  // if columnNames contains integers, we directly use them as column index:
+  for (let i = 0; i < columnNames.length; i++) {
+    if (typeof columnNames[i] != "string") {
+      indexes[i] = columnNames[i];
+    }
+  }
+
   const extracted = _.map(data, row => _.pullAt(row, indexes));
 
   return extracted;
@@ -47,7 +58,7 @@ module.exports = function loadCSV(
       }
      
 
-      return _.isNaN(result) ? element : result;
+      return _.isNaN(result) ? element.replace(/^"+|"+$/gm,'') : result;
     });
   });
 
