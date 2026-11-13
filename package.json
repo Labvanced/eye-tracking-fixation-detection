@@ -1,16 +1,16 @@
 {
   "name": "labvanced-fixation-detection",
-  "version": "1.0.0",
-  "description": "",
-  "main": "run.js",
+  "version": "2.0.15",
+  "description": "The fixation detection algorithms of Labvanced webcam eye tracking (Real-Time, Lagged Optimized, Merged Fixations)",
+  "type": "module",
+  "main": "eyetracking/FixationDetectorMerged.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/fixationMerge.test.mjs && node tests/syntheticGroundTruth.test.mjs",
+    "example": "node run.mjs legacy-2021/data/1/timeseries_data.csv --task large_grid --calibration-error 56 --out fixations_example.csv"
   },
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "convert-array-to-csv": "^2.0.0",
-    "csv-writer": "^1.6.0",
-    "lodash": "^4.17.21"
-  }
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "Scicovery GmbH",
+  "license": "MIT"
 }

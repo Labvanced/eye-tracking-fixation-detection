@@ -1,0 +1,16 @@
+{
+  "name": "labvanced-fixation-detection",
+  "version": "1.0.0",
+  "description": "",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "convert-array-to-csv": "^2.0.0",
+    "csv-writer": "^1.6.0",
+    "lodash": "^4.17.21"
+  }
+}
